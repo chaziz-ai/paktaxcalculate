@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 const FAQ: { q: string; a: string }[] = [
   { q: "Tax-free salary limit kitni hai 2026-27 mein?", a: "FY 2026-27 mein tax-free annual salary limit Rs 600,000 hai (yaani Rs 50,000/month). Is se kam earn karne walon par koi income tax nahi banta." },
@@ -28,7 +28,6 @@ const slabs2627: SlabSet = {
   },
 };
 
-// Previous year (FY 2025-26) reference slabs (approximation of pre-revision rates)
 const slabs2526: SlabSet = {
   name: "FY 2025-26",
   calc: (i) => {
@@ -39,7 +38,6 @@ const slabs2526: SlabSet = {
     else if (i <= 3200000) tax = 180000 + (i - 2200000) * 0.25;
     else if (i <= 4100000) tax = 430000 + (i - 3200000) * 0.30;
     else tax = 700000 + (i - 4100000) * 0.35;
-    // 10% surcharge on income above 10M in old regime
     if (i > 10000000) tax *= 1.1;
     return tax;
   },
@@ -48,21 +46,15 @@ const slabs2526: SlabSet = {
 const fmt = (n: number) =>
   "Rs " + Math.round(n).toLocaleString("en-PK", { maximumFractionDigits: 0 });
 
+const SITE_URL = "https://pakistantaxcalculator.app";
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
-      {
-        name: "description",
-        content:
-          "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, freelancer tax based on latest FBR budget slabs. Instant results.",
-      },
+      { name: "description", content: "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, freelancer tax based on latest FBR budget slabs. Instant results." },
       { property: "og:title", content: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
-      {
-        property: "og:description",
-        content:
-          "Calculate your salary & freelancer tax instantly using FBR Budget 2026-27 slabs.",
-      },
+      { property: "og:description", content: "Calculate your salary & freelancer tax instantly using FBR Budget 2026-27 slabs." },
       { property: "og:url", content: "/" },
     ],
     links: [{ rel: "canonical", href: "/" }],
@@ -79,6 +71,44 @@ export const Route = createFileRoute("/")({
           })),
         }),
       },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Pakistan Tax Calculator",
+          url: SITE_URL,
+          potentialAction: {
+            "@type": "SearchAction",
+            target: `${SITE_URL}/?q={search_term_string}`,
+            "query-input": "required name=search_term_string",
+          },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Pakistan Tax Calculator",
+          url: SITE_URL,
+          logo: `${SITE_URL}/logo.png`,
+          sameAs: ["https://www.fbr.gov.pk"],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+            { "@type": "ListItem", position: 2, name: "Salary Tax", item: `${SITE_URL}/#salary` },
+            { "@type": "ListItem", position: 3, name: "Freelancer Tax", item: `${SITE_URL}/#freelancer` },
+            { "@type": "ListItem", position: 4, name: "FBR Slabs", item: `${SITE_URL}/#slabs` },
+          ],
+        }),
+      },
     ],
   }),
   component: Page,
@@ -89,7 +119,7 @@ function Page() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <Hero />
-      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-24 pb-24">
+      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-24 pb-32">
         <section id="salary" className="scroll-mt-24">
           <SectionHeading kicker="Calculator" title="Salary Tax Calculator" subtitle="FBR Budget 2026-27 slabs, instant calculation." />
           <SalaryCalculator />
@@ -109,6 +139,7 @@ function Page() {
         <SeoContent />
       </main>
       <Footer />
+      <MobileStickyCTA />
     </div>
   );
 }
@@ -150,12 +181,18 @@ function Hero() {
           Instantly calculate your salary tax, freelancer tax & FBR liability — based on Budget 2026-27.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-          <a href="#salary" className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_oklch(0.88_0.22_155_/_60%)] hover:brightness-110 transition">
+          <a href="#salary" className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_oklch(0.88_0.22_155_/_60%)] hover:brightness-110 hover:-translate-y-0.5 transition">
             Calculate Salary Tax
           </a>
-          <a href="#freelancer" className="inline-flex items-center justify-center rounded-xl glass px-6 py-3 text-sm font-semibold text-foreground hover:bg-white/10 transition">
+          <a href="#freelancer" className="inline-flex items-center justify-center rounded-xl glass px-6 py-3 text-sm font-semibold text-foreground hover:bg-white/10 hover:-translate-y-0.5 transition">
             Freelancer Tax
           </a>
+        </div>
+        <div className="mt-10 flex flex-wrap gap-2 justify-center text-[11px] text-muted-foreground">
+          <span className="rounded-full glass px-3 py-1">FBR Compliant</span>
+          <span className="rounded-full glass px-3 py-1">100% Free</span>
+          <span className="rounded-full glass px-3 py-1">No Sign-up</span>
+          <span className="rounded-full glass px-3 py-1">Real-time</span>
         </div>
       </div>
     </section>
@@ -184,51 +221,230 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 const inputCls =
   "w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-base outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 transition";
 
+/* ---------- helpers ---------- */
+
+function useCountUp(target: number, duration = 700) {
+  const [value, setValue] = useState(target);
+  const fromRef = useRef(target);
+  useEffect(() => {
+    const from = fromRef.current;
+    const to = target;
+    if (from === to) return;
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - t, 3);
+      setValue(from + (to - from) * eased);
+      if (t < 1) raf = requestAnimationFrame(tick);
+      else fromRef.current = to;
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, duration]);
+  return value;
+}
+
+function CountUp({ value, format = fmt, className }: { value: number; format?: (n: number) => string; className?: string }) {
+  const v = useCountUp(value);
+  return <span className={className}>{format(v)}</span>;
+}
+
+type HistoryEntry = {
+  id: string;
+  type: "salary" | "freelancer";
+  date: string;
+  income: number;
+  tax: number;
+  net: number;
+  meta: string;
+};
+
+function useHistory() {
+  const [items, setItems] = useState<HistoryEntry[]>([]);
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem("ptc-history");
+      if (raw) setItems(JSON.parse(raw));
+    } catch {}
+  }, []);
+  const push = (e: Omit<HistoryEntry, "id" | "date">) => {
+    const entry: HistoryEntry = { ...e, id: Math.random().toString(36).slice(2), date: new Date().toISOString() };
+    setItems((prev) => {
+      const next = [entry, ...prev.filter((p) => !(p.type === e.type && p.income === e.income && p.meta === e.meta))].slice(0, 5);
+      try { localStorage.setItem("ptc-history", JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+  const clear = () => {
+    setItems([]);
+    try { localStorage.removeItem("ptc-history"); } catch {}
+  };
+  return { items, push, clear };
+}
+
+/* ---------- Doughnut Chart ---------- */
+
+function DoughnutChart({ tax, net }: { tax: number; net: number }) {
+  const total = Math.max(1, tax + net);
+  const taxPct = (tax / total) * 100;
+  const circumference = 2 * Math.PI * 70;
+  const taxDash = (taxPct / 100) * circumference;
+  const animatedTax = useCountUp(taxDash, 800);
+  const animatedPct = useCountUp(taxPct, 800);
+
+  return (
+    <div className="relative grid place-items-center w-full">
+      <svg viewBox="0 0 180 180" className="w-48 h-48">
+        <circle cx="90" cy="90" r="70" fill="none" stroke="oklch(1 0 0 / 6%)" strokeWidth="22" />
+        <circle
+          cx="90" cy="90" r="70" fill="none"
+          stroke="var(--primary)" strokeWidth="22" strokeLinecap="round"
+          strokeDasharray={`${circumference} ${circumference}`}
+          strokeDashoffset={circumference - (circumference - animatedTax)}
+          transform="rotate(-90 90 90)"
+          style={{ filter: "drop-shadow(0 0 8px oklch(0.88 0.22 155 / 45%))" }}
+        />
+        <circle
+          cx="90" cy="90" r="70" fill="none"
+          stroke="var(--gold)" strokeWidth="22" strokeLinecap="round"
+          strokeDasharray={`${animatedTax} ${circumference}`}
+          transform="rotate(-90 90 90)"
+          style={{ filter: "drop-shadow(0 0 8px oklch(0.86 0.17 90 / 45%))" }}
+        />
+      </svg>
+      <div className="absolute inset-0 grid place-items-center text-center">
+        <div>
+          <div className="text-3xl font-extrabold text-gold tabular-nums">{animatedPct.toFixed(1)}%</div>
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Tax Rate</div>
+        </div>
+      </div>
+      <div className="mt-4 flex gap-4 text-xs">
+        <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-primary" />Net Income</span>
+        <span className="inline-flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full" style={{ background: "var(--gold)" }} />Total Tax</span>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Salary Calculator ---------- */
+
 function SalaryCalculator() {
-  const [monthly, setMonthly] = useState<string>("100000");
+  const [mode, setMode] = useState<"monthly" | "annual">("monthly");
+  const [income, setIncome] = useState<string>("100000");
   const [empType, setEmpType] = useState<"salaried" | "government">("salaried");
   const [year, setYear] = useState<"2026" | "2025">("2026");
+  const { items: history, push, clear } = useHistory();
 
-  const annual = Math.max(0, Number(monthly) || 0) * 12;
+  const numericIncome = Math.max(0, Number(income) || 0);
+  const annual = mode === "monthly" ? numericIncome * 12 : numericIncome;
+  const monthlyEq = annual / 12;
   const active = year === "2026" ? slabs2627 : slabs2526;
   const other = year === "2026" ? slabs2526 : slabs2627;
   const taxActive = active.calc(annual);
   const taxOther = other.calc(annual);
-  // Govt employees get a small concession reflected as 25% lower tax (illustrative)
   const adjActive = empType === "government" ? taxActive * 0.75 : taxActive;
   const adjOther = empType === "government" ? taxOther * 0.75 : taxOther;
   const monthlyTax = adjActive / 12;
   const netMonthly = (annual - adjActive) / 12;
   const effective = annual > 0 ? (adjActive / annual) * 100 : 0;
-  const saved = year === "2026" ? adjOther - adjActive : adjActive - adjOther;
+  const saved = adjOther - adjActive; // positive when active year is cheaper
+  const monthlySaving = saved / 12;
+  const percentSaved = adjOther > 0 ? (saved / adjOther) * 100 : 0;
+
+  const setMode2 = (m: "monthly" | "annual") => {
+    if (m === mode) return;
+    if (m === "monthly") setIncome(String(Math.round(numericIncome / 12)));
+    else setIncome(String(Math.round(numericIncome * 12)));
+    setMode(m);
+  };
+
+  const saveToHistory = () => push({
+    type: "salary", income: annual, tax: adjActive, net: annual - adjActive,
+    meta: `${active.name} • ${empType}`,
+  });
+
+  const copyResults = async () => {
+    const text = `Pakistan Tax Calculator — ${active.name}
+Annual Income: ${fmt(annual)}
+Annual Tax: ${fmt(adjActive)}
+Monthly Tax: ${fmt(monthlyTax)}
+Net Take-home / Month: ${fmt(netMonthly)}
+Effective Rate: ${effective.toFixed(2)}%`;
+    try { await navigator.clipboard.writeText(text); alert("Results copied ✓"); } catch { alert("Copy failed"); }
+  };
+
+  const shareResults = async () => {
+    const data = {
+      title: "Pakistan Tax Calculation",
+      text: `My ${active.name} tax: ${fmt(adjActive)} on ${fmt(annual)} income (${effective.toFixed(2)}%).`,
+      url: typeof location !== "undefined" ? location.href : SITE_URL,
+    };
+    try {
+      if (navigator.share) await navigator.share(data);
+      else { await navigator.clipboard.writeText(`${data.text} ${data.url}`); alert("Share link copied ✓"); }
+    } catch {}
+  };
+
+  const downloadPDF = () => {
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Tax Report — ${active.name}</title>
+<style>
+  body{font-family:Inter,Arial,sans-serif;color:#0A0F1E;padding:48px;max-width:720px;margin:auto}
+  h1{margin:0 0 4px;font-size:24px}
+  .sub{color:#64748b;margin-bottom:24px;font-size:13px}
+  .card{border:1px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;display:flex;justify-content:space-between}
+  .card .l{color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+  .card .v{font-weight:700;font-size:18px}
+  .accent{color:#00b06b}
+  .gold{color:#b8860b}
+  .ft{margin-top:32px;font-size:11px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:14px}
+</style></head><body>
+<h1>Pakistan Tax Report</h1>
+<div class="sub">${active.name} • ${empType === "government" ? "Government" : "Salaried"} • Generated ${new Date().toLocaleString("en-PK")}</div>
+<div class="card"><span class="l">Annual Income</span><span class="v">${fmt(annual)}</span></div>
+<div class="card"><span class="l">Total Annual Tax</span><span class="v gold">${fmt(adjActive)}</span></div>
+<div class="card"><span class="l">Monthly Tax Deduction</span><span class="v">${fmt(monthlyTax)}</span></div>
+<div class="card"><span class="l">Net Take-home / Month</span><span class="v accent">${fmt(netMonthly)}</span></div>
+<div class="card"><span class="l">Effective Tax Rate</span><span class="v">${effective.toFixed(2)}%</span></div>
+${saved > 0 ? `<div class="card"><span class="l">Savings vs ${other.name}</span><span class="v accent">${fmt(saved)}</span></div>` : ""}
+<div class="ft">Generated by Pakistan Tax Calculator — estimation only. Consult FBR or a registered tax advisor for final filing.</div>
+<script>window.onload=()=>{window.print();}</script>
+</body></html>`;
+    const w = window.open("", "_blank");
+    if (!w) return alert("Allow pop-ups to download PDF");
+    w.document.write(html); w.document.close();
+  };
 
   return (
     <div className="grid lg:grid-cols-5 gap-6">
       <div className="lg:col-span-2 glass rounded-2xl p-6 space-y-5">
-        <Field label="Monthly Salary (PKR)">
-          <input
-            type="number"
-            inputMode="numeric"
-            min={0}
-            value={monthly}
-            onChange={(e) => setMonthly(e.target.value)}
-            className={inputCls}
-            placeholder="e.g. 150000"
-          />
+        <Field label="Income Mode">
+          <div className="grid grid-cols-2 gap-2">
+            {(["monthly", "annual"] as const).map((m) => (
+              <button key={m} type="button" onClick={() => setMode2(m)}
+                className={`rounded-xl px-3 py-2.5 text-sm font-medium border transition ${
+                  mode === m ? "bg-primary text-primary-foreground border-primary" : "bg-white/5 text-muted-foreground border-white/10 hover:text-foreground"
+                }`}>
+                {m === "monthly" ? "Monthly" : "Annual"}
+              </button>
+            ))}
+          </div>
+        </Field>
+        <Field label={mode === "monthly" ? "Monthly Salary (PKR)" : "Annual Salary (PKR)"}>
+          <input type="number" inputMode="numeric" min={0} value={income}
+            onChange={(e) => setIncome(e.target.value)} className={inputCls}
+            placeholder={mode === "monthly" ? "e.g. 150000" : "e.g. 1800000"} />
+          <div className="mt-2 text-[11px] text-muted-foreground">
+            ≈ {mode === "monthly" ? `${fmt(annual)} per year` : `${fmt(monthlyEq)} per month`}
+          </div>
         </Field>
         <Field label="Employment Type">
           <div className="grid grid-cols-2 gap-2">
             {(["salaried", "government"] as const).map((t) => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setEmpType(t)}
+              <button key={t} type="button" onClick={() => setEmpType(t)}
                 className={`rounded-xl px-3 py-2.5 text-sm font-medium border transition ${
-                  empType === t
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-white/5 text-muted-foreground border-white/10 hover:text-foreground"
-                }`}
-              >
+                  empType === t ? "bg-primary text-primary-foreground border-primary" : "bg-white/5 text-muted-foreground border-white/10 hover:text-foreground"
+                }`}>
                 {t === "salaried" ? "Salaried" : "Government"}
               </button>
             ))}
@@ -237,56 +453,134 @@ function SalaryCalculator() {
         <Field label="Tax Year">
           <div className="grid grid-cols-2 gap-2">
             {(["2026", "2025"] as const).map((y) => (
-              <button
-                key={y}
-                type="button"
-                onClick={() => setYear(y)}
+              <button key={y} type="button" onClick={() => setYear(y)}
                 className={`rounded-xl px-3 py-2.5 text-sm font-medium border transition ${
-                  year === y
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-white/5 text-muted-foreground border-white/10 hover:text-foreground"
-                }`}
-              >
+                  year === y ? "bg-primary text-primary-foreground border-primary" : "bg-white/5 text-muted-foreground border-white/10 hover:text-foreground"
+                }`}>
                 FY {y === "2026" ? "2026-27" : "2025-26"}
               </button>
             ))}
           </div>
         </Field>
-        <p className="text-xs text-muted-foreground">
-          Surcharge: <span className="text-primary font-semibold">Removed</span> in FY 2026-27.
-        </p>
+        <button onClick={saveToHistory}
+          className="w-full rounded-xl bg-primary/90 hover:bg-primary text-primary-foreground py-2.5 text-sm font-semibold transition hover:-translate-y-0.5">
+          Save to History
+        </button>
+        {history.length > 0 && (
+          <div className="pt-2 border-t border-white/5">
+            <div className="flex items-center justify-between mb-2">
+              <h4 className="text-xs uppercase tracking-wider text-muted-foreground">Recent (last 5)</h4>
+              <button onClick={clear} className="text-[11px] text-muted-foreground hover:text-foreground">Clear</button>
+            </div>
+            <ul className="space-y-1.5">
+              {history.map((h) => (
+                <li key={h.id}>
+                  <button
+                    onClick={() => { setMode("annual"); setIncome(String(h.income)); }}
+                    className="w-full text-left rounded-lg bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 px-3 py-2 text-xs transition">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium">{fmt(h.income)}</span>
+                      <span className="text-gold">{fmt(h.tax)}</span>
+                    </div>
+                    <div className="text-[10px] text-muted-foreground mt-0.5">{h.meta} • {new Date(h.date).toLocaleDateString("en-PK")}</div>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
-      <div key={`${monthly}-${empType}-${year}`} className="lg:col-span-3 glass rounded-2xl p-6 animate-fade-up">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold">Your Tax Breakdown</h3>
-          <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">{active.name}</span>
+      <div className="lg:col-span-3 space-y-4">
+        {saved > 0 && year === "2026" && (
+          <div className="rounded-2xl border border-primary/40 bg-primary/10 px-5 py-4 flex items-center gap-3 animate-fade-up">
+            <span className="text-2xl">🎉</span>
+            <div>
+              <div className="font-semibold text-primary">You save <CountUp value={saved} /> compared to FY 2025-26</div>
+              <div className="text-xs text-muted-foreground">≈ {fmt(monthlySaving)} extra in your pocket every month</div>
+            </div>
+          </div>
+        )}
+
+        <div key={`${income}-${mode}-${empType}-${year}`} className="glass rounded-2xl p-6 animate-fade-up">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold">Your Tax Breakdown</h3>
+            <span className="text-xs px-2 py-1 rounded-full bg-primary/10 text-primary font-medium">{active.name}</span>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 items-center">
+            <DoughnutChart tax={adjActive} net={Math.max(0, annual - adjActive)} />
+            <div className="grid grid-cols-1 gap-3">
+              <Stat label="Annual Income" value={annual} />
+              <Stat label="Total Annual Tax" value={adjActive} accent="gold" />
+              <Stat label="Monthly Tax" value={monthlyTax} />
+              <Stat label="Net / Month" value={netMonthly} accent="primary" />
+            </div>
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            <button onClick={copyResults} className="rounded-xl glass px-4 py-2 text-sm hover:bg-white/10 hover:-translate-y-0.5 transition">📋 Copy Results</button>
+            <button onClick={downloadPDF} className="rounded-xl glass px-4 py-2 text-sm hover:bg-white/10 hover:-translate-y-0.5 transition">⬇ Download PDF</button>
+            <button onClick={shareResults} className="rounded-xl glass px-4 py-2 text-sm hover:bg-white/10 hover:-translate-y-0.5 transition">🔗 Share</button>
+          </div>
         </div>
-        <div className="grid sm:grid-cols-2 gap-3">
-          <Stat label="Annual Income" value={fmt(annual)} />
-          <Stat label="Total Annual Tax" value={fmt(adjActive)} accent="gold" />
-          <Stat label="Monthly Tax Deduction" value={fmt(monthlyTax)} />
-          <Stat label="Net Take-Home / Month" value={fmt(netMonthly)} accent="primary" />
-          <Stat label="Effective Tax Rate" value={`${effective.toFixed(2)}%`} />
-          <Stat
-            label={`Tax Saved vs ${year === "2026" ? "FY 2025-26" : "FY 2026-27"}`}
-            value={fmt(Math.abs(saved))}
-            accent={saved >= 0 ? "primary" : "gold"}
-            hint={saved >= 0 ? "You save" : "You pay more"}
-          />
-        </div>
+
+        <YearComparison income={annual} empType={empType} />
       </div>
     </div>
   );
 }
 
-function Stat({ label, value, accent, hint }: { label: string; value: string; accent?: "primary" | "gold"; hint?: string }) {
+function Stat({ label, value, accent, hint, format = fmt }: { label: string; value: number; accent?: "primary" | "gold"; hint?: string; format?: (n: number) => string }) {
   const color = accent === "primary" ? "text-primary" : accent === "gold" ? "text-gold" : "text-foreground";
   return (
-    <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
+    <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4 hover:border-white/15 transition">
       <div className="text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
-      <div className={`mt-1 text-2xl font-bold tabular-nums ${color}`}>{value}</div>
+      <div className={`mt-1 text-2xl font-bold tabular-nums ${color}`}><CountUp value={value} format={format} /></div>
       {hint ? <div className="text-[11px] text-muted-foreground mt-0.5">{hint}</div> : null}
+    </div>
+  );
+}
+
+function YearComparison({ income, empType }: { income: number; empType: "salaried" | "government" }) {
+  const factor = empType === "government" ? 0.75 : 1;
+  const t26 = slabs2627.calc(income) * factor;
+  const t25 = slabs2526.calc(income) * factor;
+  const diff = t25 - t26;
+  const pct = t25 > 0 ? (diff / t25) * 100 : 0;
+  const monthly = diff / 12;
+
+  return (
+    <div className="glass rounded-2xl p-6">
+      <h3 className="text-lg font-semibold mb-4">Year-over-Year Comparison</h3>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="rounded-xl bg-white/[0.03] border border-white/10 p-4">
+          <div className="text-xs uppercase tracking-wider text-muted-foreground">FY 2025-26</div>
+          <div className="mt-1 text-2xl font-bold text-foreground/80 tabular-nums line-through decoration-white/20"><CountUp value={t25} /></div>
+        </div>
+        <div className="rounded-xl bg-primary/10 border border-primary/30 p-4">
+          <div className="text-xs uppercase tracking-wider text-primary">FY 2026-27</div>
+          <div className="mt-1 text-2xl font-bold text-primary tabular-nums"><CountUp value={t26} /></div>
+        </div>
+      </div>
+      {diff > 0 ? (
+        <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+          <div className="rounded-xl bg-primary/5 border border-primary/20 p-3">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">You Save</div>
+            <div className="text-lg font-bold text-primary tabular-nums"><CountUp value={diff} /></div>
+          </div>
+          <div className="rounded-xl bg-primary/5 border border-primary/20 p-3">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Saved %</div>
+            <div className="text-lg font-bold text-primary tabular-nums"><CountUp value={pct} format={(n) => `${n.toFixed(1)}%`} /></div>
+          </div>
+          <div className="rounded-xl bg-primary/5 border border-primary/20 p-3">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Monthly</div>
+            <div className="text-lg font-bold text-primary tabular-nums"><CountUp value={monthly} /></div>
+          </div>
+        </div>
+      ) : (
+        <p className="mt-4 text-sm text-muted-foreground">Enter a taxable income to see your year-over-year savings.</p>
+      )}
     </div>
   );
 }
@@ -295,7 +589,6 @@ function FreelancerCalculator() {
   const [annualStr, setAnnualStr] = useState("1500000");
   const [filer, setFiler] = useState(true);
   const annual = Math.max(0, Number(annualStr) || 0);
-  // Export-of-services withholding-style estimate: 1% filer, 2% non-filer (simplified)
   const rate = filer ? 0.01 : 0.02;
   const tax = annual * rate;
   const net = annual - tax;
@@ -304,34 +597,16 @@ function FreelancerCalculator() {
     <div className="grid lg:grid-cols-5 gap-6">
       <div className="lg:col-span-2 glass rounded-2xl p-6 space-y-5">
         <Field label="Annual Freelance Income (PKR)">
-          <input
-            type="number"
-            inputMode="numeric"
-            min={0}
-            value={annualStr}
-            onChange={(e) => setAnnualStr(e.target.value)}
-            className={inputCls}
-            placeholder="e.g. 2500000"
-          />
+          <input type="number" inputMode="numeric" min={0} value={annualStr}
+            onChange={(e) => setAnnualStr(e.target.value)} className={inputCls} placeholder="e.g. 2500000" />
         </Field>
         <Field label="Registered Filer?">
           <div className="grid grid-cols-2 gap-2">
-            {[
-              { v: true, l: "Yes — Filer" },
-              { v: false, l: "No — Non-Filer" },
-            ].map((o) => (
-              <button
-                key={String(o.v)}
-                type="button"
-                onClick={() => setFiler(o.v)}
+            {[{ v: true, l: "Yes — Filer" }, { v: false, l: "No — Non-Filer" }].map((o) => (
+              <button key={String(o.v)} type="button" onClick={() => setFiler(o.v)}
                 className={`rounded-xl px-3 py-2.5 text-sm font-medium border transition ${
-                  filer === o.v
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-white/5 text-muted-foreground border-white/10 hover:text-foreground"
-                }`}
-              >
-                {o.l}
-              </button>
+                  filer === o.v ? "bg-primary text-primary-foreground border-primary" : "bg-white/5 text-muted-foreground border-white/10 hover:text-foreground"
+                }`}>{o.l}</button>
             ))}
           </div>
         </Field>
@@ -341,11 +616,13 @@ function FreelancerCalculator() {
       </div>
       <div key={`${annualStr}-${filer}`} className="lg:col-span-3 glass rounded-2xl p-6 animate-fade-up">
         <h3 className="text-lg font-semibold mb-4">Estimated Tax Liability</h3>
-        <div className="grid sm:grid-cols-2 gap-3">
-          <Stat label="Annual Income" value={fmt(annual)} />
-          <Stat label={`Tax @ ${(rate * 100).toFixed(0)}%`} value={fmt(tax)} accent="gold" />
-          <Stat label="Net After Tax" value={fmt(net)} accent="primary" />
-          <Stat label="Status" value={filer ? "Active Filer" : "Non-Filer"} />
+        <div className="grid md:grid-cols-2 gap-6 items-center">
+          <DoughnutChart tax={tax} net={net} />
+          <div className="grid gap-3">
+            <Stat label="Annual Income" value={annual} />
+            <Stat label={`Tax @ ${(rate * 100).toFixed(0)}%`} value={tax} accent="gold" />
+            <Stat label="Net After Tax" value={net} accent="primary" />
+          </div>
         </div>
         <p className="text-xs text-muted-foreground mt-4">
           Estimate based on export-of-services regime. Domestic-client income may attract higher rates and provincial sales tax.
@@ -378,7 +655,7 @@ function SlabTable() {
           </thead>
           <tbody>
             {rows.map((r) => (
-              <tr key={r.range} className="border-t border-white/5">
+              <tr key={r.range} className="border-t border-white/5 hover:bg-white/[0.02] transition">
                 <td className="px-4 py-3 font-medium">{r.range}</td>
                 <td className="px-4 py-3 text-muted-foreground line-through decoration-white/20">{r.old}</td>
                 <td className="px-4 py-3 text-foreground font-semibold">{r.neu}</td>
@@ -394,20 +671,38 @@ function SlabTable() {
 
 function FAQAccordion() {
   const [open, setOpen] = useState<number | null>(0);
+  const [query, setQuery] = useState("");
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return FAQ.map((f, i) => ({ ...f, i }));
+    return FAQ.map((f, i) => ({ ...f, i })).filter((f) => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q));
+  }, [query]);
+
   return (
     <div className="space-y-3">
-      {FAQ.map((f, i) => {
-        const isOpen = open === i;
+      <div className="relative">
+        <input
+          value={query} onChange={(e) => setQuery(e.target.value)}
+          placeholder="🔍 Search questions… e.g. surcharge, filer, freelancer"
+          className={inputCls}
+        />
+      </div>
+      {filtered.length === 0 ? (
+        <p className="text-center text-sm text-muted-foreground py-6">No matching questions. Try another keyword.</p>
+      ) : filtered.map((f) => {
+        const isOpen = open === f.i;
         return (
-          <div key={i} className="glass rounded-xl overflow-hidden">
-            <button
-              onClick={() => setOpen(isOpen ? null : i)}
-              className="w-full flex items-center justify-between text-left px-5 py-4 hover:bg-white/[0.03] transition"
-              aria-expanded={isOpen}
-            >
-              <span className="font-medium pr-4">{f.q}</span>
-              <span className={`text-primary text-xl transition-transform shrink-0 ${isOpen ? "rotate-45" : ""}`}>+</span>
-            </button>
+          <div key={f.i} className="glass rounded-xl overflow-hidden hover:border-white/20 transition">
+            <h3>
+              <button
+                onClick={() => setOpen(isOpen ? null : f.i)}
+                className="w-full flex items-center justify-between text-left px-5 py-4 hover:bg-white/[0.03] transition"
+                aria-expanded={isOpen}
+              >
+                <span className="font-medium pr-4">{f.q}</span>
+                <span className={`text-primary text-xl transition-transform shrink-0 ${isOpen ? "rotate-45" : ""}`}>+</span>
+              </button>
+            </h3>
             {isOpen && (
               <div className="px-5 pb-5 text-muted-foreground leading-relaxed animate-fade-up">{f.a}</div>
             )}
@@ -427,15 +722,35 @@ function SeoContent() {
       <p className="mt-4 text-muted-foreground leading-relaxed">
         Our Pakistan tax calculator helps salaried professionals and freelancers instantly estimate
         their income tax Pakistan 2026-27 liability using the latest FBR tax slabs 2026 announced in
-        the Federal Budget. Just enter your monthly salary or annual freelance income, choose your
-        employment type, and the salary tax calculator Pakistan tool computes annual tax, monthly
-        withholding, net take-home pay and effective tax rate in real time. Compare FY 2025-26 vs
-        FY 2026-27 to see exactly how much you save after the surcharge removal and revised slabs.
-        Freelancers can switch to the freelancer tax Pakistan mode to estimate filer vs non-filer
-        withholding on export remittances. All calculations follow the Finance Bill 2026 and are
-        designed for quick FBR planning, payroll checks, and tax-return preparation.
+        the Federal Budget. Enter monthly or annual income, choose your employment type, and the
+        salary tax calculator Pakistan tool computes annual tax, monthly withholding, net take-home
+        pay and effective tax rate in real time. Compare FY 2025-26 vs FY 2026-27 to see exactly how
+        much you save after the surcharge removal and revised slabs.
       </p>
+      <div className="mt-6 grid sm:grid-cols-3 gap-3 text-sm">
+        <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
+          <h3 className="font-semibold mb-1">FBR Compliant</h3>
+          <p className="text-muted-foreground text-xs">Built on Finance Bill 2026 slabs.</p>
+        </div>
+        <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
+          <h3 className="font-semibold mb-1">Privacy First</h3>
+          <p className="text-muted-foreground text-xs">Calculations stay in your browser.</p>
+        </div>
+        <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
+          <h3 className="font-semibold mb-1">Instant Results</h3>
+          <p className="text-muted-foreground text-xs">No reload, no sign-up.</p>
+        </div>
+      </div>
     </section>
+  );
+}
+
+function MobileStickyCTA() {
+  return (
+    <a href="#salary"
+      className="sm:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-40 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-[0_10px_30px_-8px_oklch(0.88_0.22_155_/_70%)] hover:brightness-110 transition">
+      ⚡ Calculate Tax
+    </a>
   );
 }
 
@@ -445,9 +760,7 @@ function Footer() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 py-10 grid sm:grid-cols-3 gap-6 text-sm">
         <div>
           <div className="font-bold">Pakistan Tax Calculator</div>
-          <p className="text-muted-foreground mt-2">
-            Updated as per Budget 2026-27 | Finance Bill June 12, 2026
-          </p>
+          <p className="text-muted-foreground mt-2">Updated as per Budget 2026-27 | Finance Bill June 12, 2026</p>
         </div>
         <div className="text-muted-foreground">
           <div className="font-semibold text-foreground mb-2">Disclaimer</div>
