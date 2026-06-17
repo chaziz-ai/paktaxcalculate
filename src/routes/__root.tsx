@@ -91,6 +91,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
+      { name: "description", content: "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, monthly deductions and net take-home pay instantly. Updated with Budget 2026-27 new slabs." },
+      { property: "og:description", content: "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, monthly deductions and net take-home pay instantly. Updated with Budget 2026-27 new slabs." },
+      { name: "twitter:description", content: "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, monthly deductions and net take-home pay instantly. Updated with Budget 2026-27 new slabs." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8b5b2f6d-09b4-4437-a3ad-f78a6e059ff1" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8b5b2f6d-09b4-4437-a3ad-f78a6e059ff1" },
     ],
     links: [
       {
