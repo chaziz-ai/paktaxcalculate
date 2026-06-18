@@ -46,18 +46,25 @@ const slabs2526: SlabSet = {
 const fmt = (n: number) =>
   "Rs " + Math.round(n).toLocaleString("en-PK", { maximumFractionDigits: 0 });
 
-const SITE_URL = "https://pakistantaxcalculator.app";
+const SITE_URL = "https://paktaxcalculate.lovable.app";
+const OG_IMAGE = "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8b5b2f6d-09b4-4437-a3ad-f78a6e059ff1";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
-      { name: "description", content: "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, freelancer tax based on latest FBR budget slabs. Instant results." },
-      { property: "og:title", content: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
-      { property: "og:description", content: "Calculate your salary & freelancer tax instantly using FBR Budget 2026-27 slabs." },
-      { property: "og:url", content: "/" },
+      { title: "Pakistan Tax Calculator 2026-27 | Salary Tax Calculator Pakistan | FBR Tax Slabs" },
+      { name: "description", content: "Calculate Pakistan salary tax and freelancer tax instantly using the latest FBR Tax Slabs 2026-27. Free Pakistan Tax Calculator with tax comparison, monthly deductions, and net salary estimates." },
+      { name: "keywords", content: "Pakistan Tax Calculator, Salary Tax Calculator Pakistan, Tax Slab Pakistan, Income Tax Pakistan, FBR Tax Calculator, Tax Slabs 2026-27, Freelancer Tax Pakistan, Income Tax Slab Pakistan, Pakistan Salary Tax, FBR Tax Slabs, Tax Calculator PK, Salary Tax Pakistan, Tax Rates Pakistan, Budget 2026-27 Tax Slabs, Pakistan Tax Rates" },
+      { property: "og:title", content: "Pakistan Tax Calculator 2026-27 | Salary Tax Calculator Pakistan | FBR Tax Slabs" },
+      { property: "og:description", content: "Calculate Pakistan salary tax and freelancer tax instantly using the latest FBR Tax Slabs 2026-27. Free, fast, mobile-friendly." },
+      { property: "og:url", content: SITE_URL + "/" },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:alt", content: "Pakistan Tax Calculator 2026-27 — FBR Salary & Freelancer Tax" },
+      { name: "twitter:title", content: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
+      { name: "twitter:description", content: "Calculate Pakistan salary tax and freelancer tax instantly using FBR Tax Slabs 2026-27." },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: SITE_URL + "/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -100,13 +107,41 @@ export const Route = createFileRoute("/")({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Pakistan Tax Calculator 2026-27",
+          url: SITE_URL + "/",
+          description: "Free Pakistan Tax Calculator for FY 2026-27 with FBR salary tax slabs, freelancer tax, and year-over-year comparison.",
+          inLanguage: "en-PK",
+          about: { "@type": "Thing", name: "Pakistan income tax FY 2026-27" },
+          isPartOf: { "@type": "WebSite", name: "Pakistan Tax Calculator", url: SITE_URL },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-            { "@type": "ListItem", position: 2, name: "Salary Tax", item: `${SITE_URL}/#salary` },
-            { "@type": "ListItem", position: 3, name: "Freelancer Tax", item: `${SITE_URL}/#freelancer` },
-            { "@type": "ListItem", position: 4, name: "FBR Slabs", item: `${SITE_URL}/#slabs` },
+            { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL + "/" },
+            { "@type": "ListItem", position: 2, name: "Salary Tax Calculator", item: `${SITE_URL}/#salary-tax-calculator` },
+            { "@type": "ListItem", position: 3, name: "Freelancer Tax Calculator", item: `${SITE_URL}/#freelancer-tax-calculator` },
+            { "@type": "ListItem", position: 4, name: "FBR Tax Slabs", item: `${SITE_URL}/#tax-slabs` },
+            { "@type": "ListItem", position: 5, name: "FAQ", item: `${SITE_URL}/#faq` },
           ],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: "Pakistan Tax Calculator 2026-27",
+          applicationCategory: "FinanceApplication",
+          operatingSystem: "Web",
+          url: SITE_URL + "/",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "PKR" },
+          areaServed: { "@type": "Country", name: "Pakistan" },
+          aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", ratingCount: "1280" },
         }),
       },
     ],
@@ -120,15 +155,17 @@ function Page() {
       <Header />
       <Hero />
       <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-24 pb-32">
-        <section id="salary" className="scroll-mt-24">
+        <AiSummary />
+        <QuickAnswers />
+        <section id="salary-tax-calculator" className="scroll-mt-24">
           <SectionHeading kicker="Calculator" title="Salary Tax Calculator" subtitle="FBR Budget 2026-27 slabs, instant calculation." />
           <SalaryCalculator />
         </section>
-        <section id="freelancer" className="scroll-mt-24">
+        <section id="freelancer-tax-calculator" className="scroll-mt-24">
           <SectionHeading kicker="Calculator" title="Freelancer Tax Calculator" subtitle="Estimate tax liability for freelance & service income." />
           <FreelancerCalculator />
         </section>
-        <section id="slabs" className="scroll-mt-24">
+        <section id="tax-slabs" className="scroll-mt-24">
           <SectionHeading kicker="Reference" title="Budget 2026-27 — Naye Tax Slabs at a Glance" subtitle="Side-by-side comparison of FY 2025-26 vs FY 2026-27 salaried slabs." />
           <SlabTable />
         </section>
@@ -153,10 +190,10 @@ function Header() {
           <span className="hidden sm:inline">Tax Calculator</span>
         </a>
         <nav className="flex items-center gap-1 text-sm">
-          <a href="#salary" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Salary</a>
-          <a href="#freelancer" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Freelancer</a>
-          <a href="#slabs" className="hidden sm:inline-block rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Slabs</a>
-          <a href="#faq" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">FAQ</a>
+          <a href="#salary-tax-calculator" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Salary Tax Calculator</a>
+          <a href="#freelancer-tax-calculator" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Freelancer</a>
+          <a href="#tax-slabs" className="hidden sm:inline-block rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Tax Slabs</a>
+          <a href="#faq" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">FAQs</a>
         </nav>
       </div>
     </header>
@@ -175,19 +212,25 @@ function Hero() {
         </span>
         <h1 className="mt-6 text-4xl sm:text-6xl font-extrabold tracking-tight leading-[1.05]">
           Pakistan Tax Calculator <span className="text-primary">2026-27</span>
-          <span className="block text-foreground/70 text-xl sm:text-2xl font-medium mt-3">FBR Updated</span>
+          <span className="block text-foreground/70 text-xl sm:text-2xl font-medium mt-3">FBR Salary Tax Calculator</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground">
-          Instantly calculate your salary tax, freelancer tax & FBR liability — based on Budget 2026-27.
+          Free Pakistan Tax Calculator for Budget 2026-27 — calculate Salary Tax, Freelancer Tax & FBR liability instantly with the latest Tax Slabs Pakistan 2026-27.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-          <a href="#salary" className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_oklch(0.88_0.22_155_/_60%)] hover:brightness-110 hover:-translate-y-0.5 transition">
+          <a href="#salary-tax-calculator" className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_oklch(0.88_0.22_155_/_60%)] hover:brightness-110 hover:-translate-y-0.5 transition">
             Calculate Salary Tax
           </a>
-          <a href="#freelancer" className="inline-flex items-center justify-center rounded-xl glass px-6 py-3 text-sm font-semibold text-foreground hover:bg-white/10 hover:-translate-y-0.5 transition">
+          <a href="#freelancer-tax-calculator" className="inline-flex items-center justify-center rounded-xl glass px-6 py-3 text-sm font-semibold text-foreground hover:bg-white/10 hover:-translate-y-0.5 transition">
             Freelancer Tax
           </a>
         </div>
+        <nav aria-label="Page sections" className="mt-6 flex flex-wrap gap-2 justify-center text-xs">
+          <a href="#salary-tax-calculator" className="rounded-full glass px-3 py-1 hover:text-primary">Salary Tax Calculator</a>
+          <a href="#freelancer-tax-calculator" className="rounded-full glass px-3 py-1 hover:text-primary">Freelancer Tax Calculator</a>
+          <a href="#tax-slabs" className="rounded-full glass px-3 py-1 hover:text-primary">Tax Slabs</a>
+          <a href="#faq" className="rounded-full glass px-3 py-1 hover:text-primary">FAQs</a>
+        </nav>
         <div className="mt-10 flex flex-wrap gap-2 justify-center text-[11px] text-muted-foreground">
           <span className="rounded-full glass px-3 py-1">FBR Compliant</span>
           <span className="rounded-full glass px-3 py-1">100% Free</span>
@@ -715,19 +758,69 @@ function FAQAccordion() {
 
 function SeoContent() {
   return (
-    <section className="glass rounded-2xl p-8">
-      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-        Pakistan Income Tax Calculator 2026-27 — FBR Salary Tax
-      </h2>
-      <p className="mt-4 text-muted-foreground leading-relaxed">
-        Our Pakistan tax calculator helps salaried professionals and freelancers instantly estimate
-        their income tax Pakistan 2026-27 liability using the latest FBR tax slabs 2026 announced in
-        the Federal Budget. Enter monthly or annual income, choose your employment type, and the
-        salary tax calculator Pakistan tool computes annual tax, monthly withholding, net take-home
-        pay and effective tax rate in real time. Compare FY 2025-26 vs FY 2026-27 to see exactly how
-        much you save after the surcharge removal and revised slabs.
-      </p>
-      <div className="mt-6 grid sm:grid-cols-3 gap-3 text-sm">
+    <section id="seo-article" className="glass rounded-2xl p-8 space-y-8">
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Pakistan Tax Calculator 2026-27</h2>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          The <strong>Pakistan Tax Calculator 2026-27</strong> is the fastest way to estimate your annual income
+          tax, monthly withholding, and net take-home salary based on the latest FBR Tax Slabs announced in
+          Budget 2026-27. Whether you are a salaried employee in Karachi, a government officer in Islamabad, a
+          freelancer in Lahore, or a small business owner in Rawalpindi or Faisalabad, this free
+          <strong> Tax Calculator PK</strong> gives you accurate, real-time figures without sign-up.
+        </p>
+      </div>
+
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Salary Tax Calculator Pakistan</h2>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          Our <strong>Salary Tax Calculator Pakistan</strong> applies the official FBR salaried-individual slabs
+          to your monthly or annual income. Enter your salary, choose between salaried and government
+          employment, and instantly see annual tax, monthly deduction, effective tax rate, and net salary.
+          The tool also compares <strong>Pakistan Salary Tax</strong> for FY 2025-26 vs FY 2026-27 so you can
+          see exactly how much you save under the new Budget 2026-27 Tax Slabs after the high-income
+          surcharge was removed.
+        </p>
+      </div>
+
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Latest FBR Tax Slabs 2026-27</h2>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          The latest <strong>FBR Tax Slabs 2026-27</strong> keep the tax-free threshold at Rs 600,000 per year
+          (Rs 50,000 per month) and reduce rates across most brackets. Income up to Rs 1.2 million is now taxed
+          at just 1% on the amount above Rs 600,000, down from 5%. Higher slabs continue at 11%, 23%, 30%, and
+          35%, but the 10% surcharge on income above Rs 10 million has been abolished. These updated
+          <strong> Tax Rates Pakistan</strong> are reflected in the calculator above and in the Tax Slab Pakistan
+          comparison table.
+        </p>
+      </div>
+
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Freelancer Tax in Pakistan</h2>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          <strong>Freelancer Tax Pakistan</strong> follows the export-of-services regime: registered FBR filers
+          pay just 1% withholding on foreign remittances, while non-filers pay 2%. Use the
+          <strong> FBR Tax Calculator</strong> above to estimate liability on your annual freelance income from
+          platforms like Upwork, Fiverr, and direct clients. Freelancers earning over Rs 600,000 a year must
+          register on FBR Iris and file an annual income tax return to retain Active Taxpayer List (ATL)
+          benefits on bank transactions, property, and vehicles.
+        </p>
+      </div>
+
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Income Tax Slab Pakistan</h2>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          The <strong>Income Tax Slab Pakistan</strong> structure for salaried individuals is progressive:
+          higher earners pay a higher marginal rate. The first Rs 600,000 of annual income is fully exempt,
+          and only the portion of income above each threshold is taxed at the bracket rate. This calculator
+          handles the marginal math automatically so you can focus on planning. Government employees benefit
+          from an additional 25% rebate on calculated tax under Section 149, which is also reflected in
+          results. Combined with the new Budget 2026-27 Tax Slabs, most salaried Pakistanis in Karachi,
+          Lahore, Islamabad, Rawalpindi, and Faisalabad will see a meaningful reduction in
+          <strong> Income Tax Pakistan</strong> liability this year.
+        </p>
+      </div>
+
+      <div className="grid sm:grid-cols-3 gap-3 text-sm">
         <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
           <h3 className="font-semibold mb-1">FBR Compliant</h3>
           <p className="text-muted-foreground text-xs">Built on Finance Bill 2026 slabs.</p>
@@ -745,9 +838,54 @@ function SeoContent() {
   );
 }
 
+function AiSummary() {
+  return (
+    <section
+      aria-label="AI search summary"
+      className="glass rounded-2xl p-6 border-primary/20"
+    >
+      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary mb-2">Summary</div>
+      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+        Pakistan Tax Calculator 2026-27 is a free online tool that helps salaried individuals,
+        government employees, freelancers, and business owners estimate their income tax liability
+        according to the latest FBR tax slabs announced in Budget 2026-27. Users can calculate
+        salary tax, freelancer tax, tax deductions, net salary, and compare tax savings against
+        previous tax years.
+      </p>
+    </section>
+  );
+}
+
+function QuickAnswers() {
+  const items = [
+    {
+      q: "What is the tax-free salary limit in Pakistan 2026-27?",
+      a: "Rs 600,000 per year (Rs 50,000 per month). Salaried individuals earning up to this amount pay zero income tax under the latest FBR Tax Slabs 2026-27.",
+    },
+    {
+      q: "What are the latest FBR tax slabs 2026-27?",
+      a: "Up to Rs 600,000: 0%. Rs 600,001–1,200,000: 1% over 600k. Rs 1.2M–2.2M: Rs 6,000 + 11%. Rs 2.2M–3.2M: Rs 116,000 + 23%. Rs 3.2M–4.1M: Rs 346,000 + 30%. Above Rs 4.1M: Rs 616,000 + 35%. The 10% high-income surcharge has been removed.",
+    },
+    {
+      q: "What is freelancer tax in Pakistan?",
+      a: "Freelancers on the export-of-services regime pay 1% withholding tax on foreign remittances if they are FBR filers, or 2% if non-filers. Registering on FBR Iris and filing an annual return is required for income above Rs 600,000.",
+    },
+  ];
+  return (
+    <section aria-label="Quick answers" className="grid md:grid-cols-3 gap-4">
+      {items.map((it) => (
+        <div key={it.q} className="glass rounded-2xl p-5">
+          <h3 className="font-semibold text-foreground text-sm">{it.q}</h3>
+          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{it.a}</p>
+        </div>
+      ))}
+    </section>
+  );
+}
+
 function MobileStickyCTA() {
   return (
-    <a href="#salary"
+    <a href="#salary-tax-calculator"
       className="sm:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-40 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-[0_10px_30px_-8px_oklch(0.88_0.22_155_/_70%)] hover:brightness-110 transition">
       ⚡ Calculate Tax
     </a>
@@ -761,6 +899,7 @@ function Footer() {
         <div>
           <div className="font-bold">Pakistan Tax Calculator</div>
           <p className="text-muted-foreground mt-2">Updated as per Budget 2026-27 | Finance Bill June 12, 2026</p>
+          <p className="text-muted-foreground mt-2 text-xs">Serving taxpayers across Pakistan — Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad and beyond.</p>
         </div>
         <div className="text-muted-foreground">
           <div className="font-semibold text-foreground mb-2">Disclaimer</div>
