@@ -155,15 +155,17 @@ function Page() {
       <Header />
       <Hero />
       <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-24 pb-32">
-        <section id="salary" className="scroll-mt-24">
+        <AiSummary />
+        <QuickAnswers />
+        <section id="salary-tax-calculator" className="scroll-mt-24">
           <SectionHeading kicker="Calculator" title="Salary Tax Calculator" subtitle="FBR Budget 2026-27 slabs, instant calculation." />
           <SalaryCalculator />
         </section>
-        <section id="freelancer" className="scroll-mt-24">
+        <section id="freelancer-tax-calculator" className="scroll-mt-24">
           <SectionHeading kicker="Calculator" title="Freelancer Tax Calculator" subtitle="Estimate tax liability for freelance & service income." />
           <FreelancerCalculator />
         </section>
-        <section id="slabs" className="scroll-mt-24">
+        <section id="tax-slabs" className="scroll-mt-24">
           <SectionHeading kicker="Reference" title="Budget 2026-27 — Naye Tax Slabs at a Glance" subtitle="Side-by-side comparison of FY 2025-26 vs FY 2026-27 salaried slabs." />
           <SlabTable />
         </section>
@@ -188,10 +190,10 @@ function Header() {
           <span className="hidden sm:inline">Tax Calculator</span>
         </a>
         <nav className="flex items-center gap-1 text-sm">
-          <a href="#salary" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Salary</a>
-          <a href="#freelancer" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Freelancer</a>
-          <a href="#slabs" className="hidden sm:inline-block rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Slabs</a>
-          <a href="#faq" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">FAQ</a>
+          <a href="#salary-tax-calculator" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Salary Tax Calculator</a>
+          <a href="#freelancer-tax-calculator" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Freelancer</a>
+          <a href="#tax-slabs" className="hidden sm:inline-block rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Tax Slabs</a>
+          <a href="#faq" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">FAQs</a>
         </nav>
       </div>
     </header>
@@ -210,19 +212,25 @@ function Hero() {
         </span>
         <h1 className="mt-6 text-4xl sm:text-6xl font-extrabold tracking-tight leading-[1.05]">
           Pakistan Tax Calculator <span className="text-primary">2026-27</span>
-          <span className="block text-foreground/70 text-xl sm:text-2xl font-medium mt-3">FBR Updated</span>
+          <span className="block text-foreground/70 text-xl sm:text-2xl font-medium mt-3">FBR Salary Tax Calculator</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground">
-          Instantly calculate your salary tax, freelancer tax & FBR liability — based on Budget 2026-27.
+          Free Pakistan Tax Calculator for Budget 2026-27 — calculate Salary Tax, Freelancer Tax & FBR liability instantly with the latest Tax Slabs Pakistan 2026-27.
         </p>
         <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-          <a href="#salary" className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_oklch(0.88_0.22_155_/_60%)] hover:brightness-110 hover:-translate-y-0.5 transition">
+          <a href="#salary-tax-calculator" className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-[0_8px_30px_-8px_oklch(0.88_0.22_155_/_60%)] hover:brightness-110 hover:-translate-y-0.5 transition">
             Calculate Salary Tax
           </a>
-          <a href="#freelancer" className="inline-flex items-center justify-center rounded-xl glass px-6 py-3 text-sm font-semibold text-foreground hover:bg-white/10 hover:-translate-y-0.5 transition">
+          <a href="#freelancer-tax-calculator" className="inline-flex items-center justify-center rounded-xl glass px-6 py-3 text-sm font-semibold text-foreground hover:bg-white/10 hover:-translate-y-0.5 transition">
             Freelancer Tax
           </a>
         </div>
+        <nav aria-label="Page sections" className="mt-6 flex flex-wrap gap-2 justify-center text-xs">
+          <a href="#salary-tax-calculator" className="rounded-full glass px-3 py-1 hover:text-primary">Salary Tax Calculator</a>
+          <a href="#freelancer-tax-calculator" className="rounded-full glass px-3 py-1 hover:text-primary">Freelancer Tax Calculator</a>
+          <a href="#tax-slabs" className="rounded-full glass px-3 py-1 hover:text-primary">Tax Slabs</a>
+          <a href="#faq" className="rounded-full glass px-3 py-1 hover:text-primary">FAQs</a>
+        </nav>
         <div className="mt-10 flex flex-wrap gap-2 justify-center text-[11px] text-muted-foreground">
           <span className="rounded-full glass px-3 py-1">FBR Compliant</span>
           <span className="rounded-full glass px-3 py-1">100% Free</span>
@@ -782,7 +790,7 @@ function SeoContent() {
 
 function MobileStickyCTA() {
   return (
-    <a href="#salary"
+    <a href="#salary-tax-calculator"
       className="sm:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-40 inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-6 py-3 text-sm font-semibold shadow-[0_10px_30px_-8px_oklch(0.88_0.22_155_/_70%)] hover:brightness-110 transition">
       ⚡ Calculate Tax
     </a>
