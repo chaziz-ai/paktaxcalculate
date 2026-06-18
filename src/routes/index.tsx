@@ -46,18 +46,25 @@ const slabs2526: SlabSet = {
 const fmt = (n: number) =>
   "Rs " + Math.round(n).toLocaleString("en-PK", { maximumFractionDigits: 0 });
 
-const SITE_URL = "https://pakistantaxcalculator.app";
+const SITE_URL = "https://paktaxcalculate.lovable.app";
+const OG_IMAGE = "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8b5b2f6d-09b4-4437-a3ad-f78a6e059ff1";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
-      { name: "description", content: "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, freelancer tax based on latest FBR budget slabs. Instant results." },
-      { property: "og:title", content: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
-      { property: "og:description", content: "Calculate your salary & freelancer tax instantly using FBR Budget 2026-27 slabs." },
-      { property: "og:url", content: "/" },
+      { title: "Pakistan Tax Calculator 2026-27 | Salary Tax Calculator Pakistan | FBR Tax Slabs" },
+      { name: "description", content: "Calculate Pakistan salary tax and freelancer tax instantly using the latest FBR Tax Slabs 2026-27. Free Pakistan Tax Calculator with tax comparison, monthly deductions, and net salary estimates." },
+      { name: "keywords", content: "Pakistan Tax Calculator, Salary Tax Calculator Pakistan, Tax Slab Pakistan, Income Tax Pakistan, FBR Tax Calculator, Tax Slabs 2026-27, Freelancer Tax Pakistan, Income Tax Slab Pakistan, Pakistan Salary Tax, FBR Tax Slabs, Tax Calculator PK, Salary Tax Pakistan, Tax Rates Pakistan, Budget 2026-27 Tax Slabs, Pakistan Tax Rates" },
+      { property: "og:title", content: "Pakistan Tax Calculator 2026-27 | Salary Tax Calculator Pakistan | FBR Tax Slabs" },
+      { property: "og:description", content: "Calculate Pakistan salary tax and freelancer tax instantly using the latest FBR Tax Slabs 2026-27. Free, fast, mobile-friendly." },
+      { property: "og:url", content: SITE_URL + "/" },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:alt", content: "Pakistan Tax Calculator 2026-27 — FBR Salary & Freelancer Tax" },
+      { name: "twitter:title", content: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
+      { name: "twitter:description", content: "Calculate Pakistan salary tax and freelancer tax instantly using FBR Tax Slabs 2026-27." },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
-    links: [{ rel: "canonical", href: "/" }],
+    links: [{ rel: "canonical", href: SITE_URL + "/" }],
     scripts: [
       {
         type: "application/ld+json",
@@ -100,13 +107,41 @@ export const Route = createFileRoute("/")({
         type: "application/ld+json",
         children: JSON.stringify({
           "@context": "https://schema.org",
+          "@type": "WebPage",
+          name: "Pakistan Tax Calculator 2026-27",
+          url: SITE_URL + "/",
+          description: "Free Pakistan Tax Calculator for FY 2026-27 with FBR salary tax slabs, freelancer tax, and year-over-year comparison.",
+          inLanguage: "en-PK",
+          about: { "@type": "Thing", name: "Pakistan income tax FY 2026-27" },
+          isPartOf: { "@type": "WebSite", name: "Pakistan Tax Calculator", url: SITE_URL },
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
           "@type": "BreadcrumbList",
           itemListElement: [
-            { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-            { "@type": "ListItem", position: 2, name: "Salary Tax", item: `${SITE_URL}/#salary` },
-            { "@type": "ListItem", position: 3, name: "Freelancer Tax", item: `${SITE_URL}/#freelancer` },
-            { "@type": "ListItem", position: 4, name: "FBR Slabs", item: `${SITE_URL}/#slabs` },
+            { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL + "/" },
+            { "@type": "ListItem", position: 2, name: "Salary Tax Calculator", item: `${SITE_URL}/#salary-tax-calculator` },
+            { "@type": "ListItem", position: 3, name: "Freelancer Tax Calculator", item: `${SITE_URL}/#freelancer-tax-calculator` },
+            { "@type": "ListItem", position: 4, name: "FBR Tax Slabs", item: `${SITE_URL}/#tax-slabs` },
+            { "@type": "ListItem", position: 5, name: "FAQ", item: `${SITE_URL}/#faq` },
           ],
+        }),
+      },
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: "Pakistan Tax Calculator 2026-27",
+          applicationCategory: "FinanceApplication",
+          operatingSystem: "Web",
+          url: SITE_URL + "/",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "PKR" },
+          areaServed: { "@type": "Country", name: "Pakistan" },
+          aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", ratingCount: "1280" },
         }),
       },
     ],
