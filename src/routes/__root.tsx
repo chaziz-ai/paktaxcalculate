@@ -77,26 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
-      {
-        name: "description",
-        content:
-          "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, freelancer tax based on latest FBR budget slabs. Instant results.",
-      },
-      { property: "og:title", content: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
-      {
-        property: "og:description",
-        content:
-          "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, freelancer tax based on latest FBR budget slabs.",
-      },
+      { name: "theme-color", content: "#0A0F1E" },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1" },
+      { name: "googlebot", content: "index, follow" },
+      { name: "geo.region", content: "PK" },
+      { name: "geo.placename", content: "Pakistan" },
+      { name: "language", content: "English" },
+      { name: "author", content: "Pakistan Tax Calculator" },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Pakistan Tax Calculator" },
+      { property: "og:locale", content: "en_PK" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
-      { name: "description", content: "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, monthly deductions and net take-home pay instantly. Updated with Budget 2026-27 new slabs." },
-      { property: "og:description", content: "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, monthly deductions and net take-home pay instantly. Updated with Budget 2026-27 new slabs." },
-      { name: "twitter:description", content: "Free Pakistan tax calculator for FY 2026-27. Calculate salary tax, monthly deductions and net take-home pay instantly. Updated with Budget 2026-27 new slabs." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8b5b2f6d-09b4-4437-a3ad-f78a6e059ff1" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8b5b2f6d-09b4-4437-a3ad-f78a6e059ff1" },
+      { name: "twitter:site", content: "@paktaxcalc" },
     ],
     links: [
       {
