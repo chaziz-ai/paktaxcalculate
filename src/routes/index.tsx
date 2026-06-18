@@ -899,6 +899,7 @@ function Footer() {
         <div>
           <div className="font-bold">Pakistan Tax Calculator</div>
           <p className="text-muted-foreground mt-2">Updated as per Budget 2026-27 | Finance Bill June 12, 2026</p>
+          <p className="text-muted-foreground mt-2 text-xs">Serving taxpayers across Pakistan — Karachi, Lahore, Islamabad, Rawalpindi, Faisalabad and beyond.</p>
         </div>
         <div className="text-muted-foreground">
           <div className="font-semibold text-foreground mb-2">Disclaimer</div>
