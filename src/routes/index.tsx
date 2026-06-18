@@ -758,19 +758,69 @@ function FAQAccordion() {
 
 function SeoContent() {
   return (
-    <section className="glass rounded-2xl p-8">
-      <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-        Pakistan Income Tax Calculator 2026-27 — FBR Salary Tax
-      </h2>
-      <p className="mt-4 text-muted-foreground leading-relaxed">
-        Our Pakistan tax calculator helps salaried professionals and freelancers instantly estimate
-        their income tax Pakistan 2026-27 liability using the latest FBR tax slabs 2026 announced in
-        the Federal Budget. Enter monthly or annual income, choose your employment type, and the
-        salary tax calculator Pakistan tool computes annual tax, monthly withholding, net take-home
-        pay and effective tax rate in real time. Compare FY 2025-26 vs FY 2026-27 to see exactly how
-        much you save after the surcharge removal and revised slabs.
-      </p>
-      <div className="mt-6 grid sm:grid-cols-3 gap-3 text-sm">
+    <section id="seo-article" className="glass rounded-2xl p-8 space-y-8">
+      <div>
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Pakistan Tax Calculator 2026-27</h2>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          The <strong>Pakistan Tax Calculator 2026-27</strong> is the fastest way to estimate your annual income
+          tax, monthly withholding, and net take-home salary based on the latest FBR Tax Slabs announced in
+          Budget 2026-27. Whether you are a salaried employee in Karachi, a government officer in Islamabad, a
+          freelancer in Lahore, or a small business owner in Rawalpindi or Faisalabad, this free
+          <strong> Tax Calculator PK</strong> gives you accurate, real-time figures without sign-up.
+        </p>
+      </div>
+
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Salary Tax Calculator Pakistan</h2>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          Our <strong>Salary Tax Calculator Pakistan</strong> applies the official FBR salaried-individual slabs
+          to your monthly or annual income. Enter your salary, choose between salaried and government
+          employment, and instantly see annual tax, monthly deduction, effective tax rate, and net salary.
+          The tool also compares <strong>Pakistan Salary Tax</strong> for FY 2025-26 vs FY 2026-27 so you can
+          see exactly how much you save under the new Budget 2026-27 Tax Slabs after the high-income
+          surcharge was removed.
+        </p>
+      </div>
+
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Latest FBR Tax Slabs 2026-27</h2>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          The latest <strong>FBR Tax Slabs 2026-27</strong> keep the tax-free threshold at Rs 600,000 per year
+          (Rs 50,000 per month) and reduce rates across most brackets. Income up to Rs 1.2 million is now taxed
+          at just 1% on the amount above Rs 600,000, down from 5%. Higher slabs continue at 11%, 23%, 30%, and
+          35%, but the 10% surcharge on income above Rs 10 million has been abolished. These updated
+          <strong> Tax Rates Pakistan</strong> are reflected in the calculator above and in the Tax Slab Pakistan
+          comparison table.
+        </p>
+      </div>
+
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Freelancer Tax in Pakistan</h2>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          <strong>Freelancer Tax Pakistan</strong> follows the export-of-services regime: registered FBR filers
+          pay just 1% withholding on foreign remittances, while non-filers pay 2%. Use the
+          <strong> FBR Tax Calculator</strong> above to estimate liability on your annual freelance income from
+          platforms like Upwork, Fiverr, and direct clients. Freelancers earning over Rs 600,000 a year must
+          register on FBR Iris and file an annual income tax return to retain Active Taxpayer List (ATL)
+          benefits on bank transactions, property, and vehicles.
+        </p>
+      </div>
+
+      <div>
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Income Tax Slab Pakistan</h2>
+        <p className="mt-3 text-muted-foreground leading-relaxed">
+          The <strong>Income Tax Slab Pakistan</strong> structure for salaried individuals is progressive:
+          higher earners pay a higher marginal rate. The first Rs 600,000 of annual income is fully exempt,
+          and only the portion of income above each threshold is taxed at the bracket rate. This calculator
+          handles the marginal math automatically so you can focus on planning. Government employees benefit
+          from an additional 25% rebate on calculated tax under Section 149, which is also reflected in
+          results. Combined with the new Budget 2026-27 Tax Slabs, most salaried Pakistanis in Karachi,
+          Lahore, Islamabad, Rawalpindi, and Faisalabad will see a meaningful reduction in
+          <strong> Income Tax Pakistan</strong> liability this year.
+        </p>
+      </div>
+
+      <div className="grid sm:grid-cols-3 gap-3 text-sm">
         <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
           <h3 className="font-semibold mb-1">FBR Compliant</h3>
           <p className="text-muted-foreground text-xs">Built on Finance Bill 2026 slabs.</p>
@@ -784,6 +834,51 @@ function SeoContent() {
           <p className="text-muted-foreground text-xs">No reload, no sign-up.</p>
         </div>
       </div>
+    </section>
+  );
+}
+
+function AiSummary() {
+  return (
+    <section
+      aria-label="AI search summary"
+      className="glass rounded-2xl p-6 border-primary/20"
+    >
+      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary mb-2">Summary</div>
+      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
+        Pakistan Tax Calculator 2026-27 is a free online tool that helps salaried individuals,
+        government employees, freelancers, and business owners estimate their income tax liability
+        according to the latest FBR tax slabs announced in Budget 2026-27. Users can calculate
+        salary tax, freelancer tax, tax deductions, net salary, and compare tax savings against
+        previous tax years.
+      </p>
+    </section>
+  );
+}
+
+function QuickAnswers() {
+  const items = [
+    {
+      q: "What is the tax-free salary limit in Pakistan 2026-27?",
+      a: "Rs 600,000 per year (Rs 50,000 per month). Salaried individuals earning up to this amount pay zero income tax under the latest FBR Tax Slabs 2026-27.",
+    },
+    {
+      q: "What are the latest FBR tax slabs 2026-27?",
+      a: "Up to Rs 600,000: 0%. Rs 600,001–1,200,000: 1% over 600k. Rs 1.2M–2.2M: Rs 6,000 + 11%. Rs 2.2M–3.2M: Rs 116,000 + 23%. Rs 3.2M–4.1M: Rs 346,000 + 30%. Above Rs 4.1M: Rs 616,000 + 35%. The 10% high-income surcharge has been removed.",
+    },
+    {
+      q: "What is freelancer tax in Pakistan?",
+      a: "Freelancers on the export-of-services regime pay 1% withholding tax on foreign remittances if they are FBR filers, or 2% if non-filers. Registering on FBR Iris and filing an annual return is required for income above Rs 600,000.",
+    },
+  ];
+  return (
+    <section aria-label="Quick answers" className="grid md:grid-cols-3 gap-4">
+      {items.map((it) => (
+        <div key={it.q} className="glass rounded-2xl p-5">
+          <h3 className="font-semibold text-foreground text-sm">{it.q}</h3>
+          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{it.a}</p>
+        </div>
+      ))}
     </section>
   );
 }
