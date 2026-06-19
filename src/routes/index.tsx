@@ -148,15 +148,15 @@ function Header() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-white/5">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <a href="#top" className="flex items-center gap-2 font-bold tracking-tight">
+        <Link to="/" className="flex items-center gap-2 font-bold tracking-tight">
           <span className="inline-grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground font-black">PK</span>
           <span className="hidden sm:inline">Tax Calculator</span>
-        </a>
+        </Link>
         <nav className="flex items-center gap-1 text-sm">
           <a href="#salary-tax-calculator" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Salary Tax Calculator</a>
           <a href="#freelancer-tax-calculator" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Freelancer</a>
-          <a href="#tax-slabs" className="hidden sm:inline-block rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Tax Slabs</a>
-          <a href="#faq" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">FAQs</a>
+          <Link to="/tax-guide" className="hidden sm:inline-block rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Tax Guide</Link>
+          <Link to="/faq" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">FAQ</Link>
         </nav>
       </div>
     </header>
@@ -191,8 +191,8 @@ function Hero() {
         <nav aria-label="Page sections" className="mt-6 flex flex-wrap gap-2 justify-center text-xs">
           <a href="#salary-tax-calculator" className="rounded-full glass px-3 py-1 hover:text-primary">Salary Tax Calculator</a>
           <a href="#freelancer-tax-calculator" className="rounded-full glass px-3 py-1 hover:text-primary">Freelancer Tax Calculator</a>
-          <a href="#tax-slabs" className="rounded-full glass px-3 py-1 hover:text-primary">Tax Slabs</a>
-          <a href="#faq" className="rounded-full glass px-3 py-1 hover:text-primary">FAQs</a>
+          <Link to="/tax-guide" className="rounded-full glass px-3 py-1 hover:text-primary">Tax Guide</Link>
+          <Link to="/faq" className="rounded-full glass px-3 py-1 hover:text-primary">FAQs</Link>
         </nav>
         <div className="mt-10 flex flex-wrap gap-2 justify-center text-[11px] text-muted-foreground">
           <span className="rounded-full glass px-3 py-1">FBR Compliant</span>
