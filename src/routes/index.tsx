@@ -127,9 +127,7 @@ function Page() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <Hero />
-      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-24 pb-32">
-        <AiSummary />
-        <QuickAnswers />
+      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-20 pb-24">
         <section id="salary-tax-calculator" className="scroll-mt-24">
           <SectionHeading kicker="Calculator" title="Salary Tax Calculator" subtitle="FBR Budget 2026-27 slabs, instant calculation." />
           <SalaryCalculator />
@@ -138,15 +136,7 @@ function Page() {
           <SectionHeading kicker="Calculator" title="Freelancer Tax Calculator" subtitle="Estimate tax liability for freelance & service income." />
           <FreelancerCalculator />
         </section>
-        <section id="tax-slabs" className="scroll-mt-24">
-          <SectionHeading kicker="Reference" title="Budget 2026-27 — Naye Tax Slabs at a Glance" subtitle="Side-by-side comparison of FY 2025-26 vs FY 2026-27 salaried slabs." />
-          <SlabTable />
-        </section>
-        <section id="faq" className="scroll-mt-24">
-          <SectionHeading kicker="FBR Q&A" title="Aam Sawalat — Pakistan Tax 2026-27" subtitle="Quick answers about salary tax, surcharge, filer benefits, freelancers." />
-          <FAQAccordion />
-        </section>
-        <SeoContent />
+        <ReadMore />
       </main>
       <Footer />
       <MobileStickyCTA />
