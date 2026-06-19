@@ -10,10 +10,8 @@ export const Route = createFileRoute("/sitemap.xml")({
         const lastmod = new Date().toISOString().slice(0, 10);
         const entries = [
           { path: "/", priority: "1.0", changefreq: "weekly" },
-          { path: "/#salary-tax-calculator", priority: "0.9", changefreq: "weekly" },
-          { path: "/#freelancer-tax-calculator", priority: "0.9", changefreq: "weekly" },
-          { path: "/#tax-slabs", priority: "0.8", changefreq: "monthly" },
-          { path: "/#faq", priority: "0.7", changefreq: "monthly" },
+          { path: "/tax-guide", priority: "0.8", changefreq: "monthly" },
+          { path: "/faq", priority: "0.8", changefreq: "monthly" },
         ];
         const urls = entries
           .map(

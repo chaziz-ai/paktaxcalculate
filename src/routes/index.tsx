@@ -1,18 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
-
-const FAQ: { q: string; a: string }[] = [
-  { q: "Tax-free salary limit kitni hai 2026-27 mein?", a: "FY 2026-27 mein tax-free annual salary limit Rs 600,000 hai (yaani Rs 50,000/month). Is se kam earn karne walon par koi income tax nahi banta." },
-  { q: "Surcharge khatam hua ya nahi?", a: "Ji haan — Budget 2026-27 mein high-income earners par lagaya gaya surcharge completely remove kar diya gaya hai." },
-  { q: "Filer aur non-filer mein kya farq hai?", a: "Filer woh hai jo har saal FBR ko income tax return file karta hai aur Active Taxpayer List (ATL) mein appear karta hai. Filers ko bank transactions, property, vehicles aur withholding par kam tax rates milte hain. Non-filers ko har transaction par double ya zyada withholding bharna parta hai." },
-  { q: "Freelancers ko FBR mein register karna zaroori hai?", a: "Agar aap ki annual income Rs 600,000 se zyada hai, ya aap export remittances receive karte hain, to FBR registration aur annual return file karna lazmi hai. Registered freelancers ko export concessions aur filer benefits dono milte hain." },
-  { q: "Monthly salary Rs 100,000 pe kitna tax banega?", a: "Rs 100,000/month yaani Rs 1,200,000/year — FY 2026-27 slab ke mutabiq tax sirf Rs 6,000/year ya approx Rs 500/month banega. (1% of amount exceeding 600,000.)" },
-  { q: "Salary tax kab se deduct hogi naye rates pe?", a: "Naye FY 2026-27 rates 1 July 2026 se applicable hain. Employers usi date se naye slabs ke hisab se withholding karenge." },
-  { q: "FBR return file karne ki deadline kya hai?", a: "Salaried aur non-corporate individuals ke liye annual income tax return ki deadline 30 September hai. Late filing par penalty aur ATL se removal ho sakti hai." },
-  { q: "Government employees ko kya extra benefit mila?", a: "Budget 2026-27 mein government employees ko 7% salary increase ke saath relatively lower effective tax rates di gayi hain, jis se take-home pay zyada barhi hai." },
-  { q: "Kya freelance income par sales tax bhi lagta hai?", a: "Pure export-of-services freelancers ko federal sales tax exemption available hai, lekin domestic clients ko service dene par provincial sales tax (PRA/SRB/KPRA) applicable ho sakta hai." },
-  { q: "Tax calculator kitna accurate hai?", a: "Yeh calculator FBR Budget 2026-27 ke published slabs use karta hai aur sirf estimation ke liye hai. Final liability ke liye apne tax advisor ya FBR Iris portal consult karein." },
-];
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { SITE_URL, OG_IMAGE } from "../content/tax-data";
 
 type SlabSet = { name: string; calc: (income: number) => number };
 
@@ -46,9 +34,6 @@ const slabs2526: SlabSet = {
 const fmt = (n: number) =>
   "Rs " + Math.round(n).toLocaleString("en-PK", { maximumFractionDigits: 0 });
 
-const SITE_URL = "https://paktaxcalculate.lovable.app";
-const OG_IMAGE = "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/8b5b2f6d-09b4-4437-a3ad-f78a6e059ff1";
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -66,18 +51,6 @@ export const Route = createFileRoute("/")({
     ],
     links: [{ rel: "canonical", href: SITE_URL + "/" }],
     scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: FAQ.map((f) => ({
-            "@type": "Question",
-            name: f.q,
-            acceptedAnswer: { "@type": "Answer", text: f.a },
-          })),
-        }),
-      },
       {
         type: "application/ld+json",
         children: JSON.stringify({
@@ -125,8 +98,8 @@ export const Route = createFileRoute("/")({
             { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL + "/" },
             { "@type": "ListItem", position: 2, name: "Salary Tax Calculator", item: `${SITE_URL}/#salary-tax-calculator` },
             { "@type": "ListItem", position: 3, name: "Freelancer Tax Calculator", item: `${SITE_URL}/#freelancer-tax-calculator` },
-            { "@type": "ListItem", position: 4, name: "FBR Tax Slabs", item: `${SITE_URL}/#tax-slabs` },
-            { "@type": "ListItem", position: 5, name: "FAQ", item: `${SITE_URL}/#faq` },
+            { "@type": "ListItem", position: 4, name: "Tax Guide", item: `${SITE_URL}/tax-guide` },
+            { "@type": "ListItem", position: 5, name: "FAQ", item: `${SITE_URL}/faq` },
           ],
         }),
       },
@@ -154,9 +127,7 @@ function Page() {
     <div className="min-h-screen bg-background text-foreground">
       <Header />
       <Hero />
-      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-24 pb-32">
-        <AiSummary />
-        <QuickAnswers />
+      <main className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8 space-y-20 pb-24">
         <section id="salary-tax-calculator" className="scroll-mt-24">
           <SectionHeading kicker="Calculator" title="Salary Tax Calculator" subtitle="FBR Budget 2026-27 slabs, instant calculation." />
           <SalaryCalculator />
@@ -165,15 +136,7 @@ function Page() {
           <SectionHeading kicker="Calculator" title="Freelancer Tax Calculator" subtitle="Estimate tax liability for freelance & service income." />
           <FreelancerCalculator />
         </section>
-        <section id="tax-slabs" className="scroll-mt-24">
-          <SectionHeading kicker="Reference" title="Budget 2026-27 — Naye Tax Slabs at a Glance" subtitle="Side-by-side comparison of FY 2025-26 vs FY 2026-27 salaried slabs." />
-          <SlabTable />
-        </section>
-        <section id="faq" className="scroll-mt-24">
-          <SectionHeading kicker="FBR Q&A" title="Aam Sawalat — Pakistan Tax 2026-27" subtitle="Quick answers about salary tax, surcharge, filer benefits, freelancers." />
-          <FAQAccordion />
-        </section>
-        <SeoContent />
+        <ReadMore />
       </main>
       <Footer />
       <MobileStickyCTA />
@@ -185,15 +148,15 @@ function Header() {
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-white/5">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <a href="#top" className="flex items-center gap-2 font-bold tracking-tight">
+        <Link to="/" className="flex items-center gap-2 font-bold tracking-tight">
           <span className="inline-grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground font-black">PK</span>
           <span className="hidden sm:inline">Tax Calculator</span>
-        </a>
+        </Link>
         <nav className="flex items-center gap-1 text-sm">
           <a href="#salary-tax-calculator" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Salary Tax Calculator</a>
           <a href="#freelancer-tax-calculator" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Freelancer</a>
-          <a href="#tax-slabs" className="hidden sm:inline-block rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Tax Slabs</a>
-          <a href="#faq" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">FAQs</a>
+          <Link to="/tax-guide" className="hidden sm:inline-block rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">Tax Guide</Link>
+          <Link to="/faq" className="rounded-md px-3 py-2 text-muted-foreground hover:text-foreground transition-colors">FAQ</Link>
         </nav>
       </div>
     </header>
@@ -228,8 +191,8 @@ function Hero() {
         <nav aria-label="Page sections" className="mt-6 flex flex-wrap gap-2 justify-center text-xs">
           <a href="#salary-tax-calculator" className="rounded-full glass px-3 py-1 hover:text-primary">Salary Tax Calculator</a>
           <a href="#freelancer-tax-calculator" className="rounded-full glass px-3 py-1 hover:text-primary">Freelancer Tax Calculator</a>
-          <a href="#tax-slabs" className="rounded-full glass px-3 py-1 hover:text-primary">Tax Slabs</a>
-          <a href="#faq" className="rounded-full glass px-3 py-1 hover:text-primary">FAQs</a>
+          <Link to="/tax-guide" className="rounded-full glass px-3 py-1 hover:text-primary">Tax Guide</Link>
+          <Link to="/faq" className="rounded-full glass px-3 py-1 hover:text-primary">FAQs</Link>
         </nav>
         <div className="mt-10 flex flex-wrap gap-2 justify-center text-[11px] text-muted-foreground">
           <span className="rounded-full glass px-3 py-1">FBR Compliant</span>
@@ -675,210 +638,19 @@ function FreelancerCalculator() {
   );
 }
 
-function SlabTable() {
-  const rows = [
-    { range: "0 – 600,000", old: "0%", neu: "0%", diff: "—" },
-    { range: "600,001 – 1,200,000", old: "5% over 600k", neu: "1% over 600k", diff: "−4%" },
-    { range: "1,200,001 – 2,200,000", old: "30,000 + 15%", neu: "6,000 + 11%", diff: "Lower" },
-    { range: "2,200,001 – 3,200,000", old: "180,000 + 25%", neu: "116,000 + 23%", diff: "Lower" },
-    { range: "3,200,001 – 4,100,000", old: "430,000 + 30%", neu: "346,000 + 30%", diff: "Lower base" },
-    { range: "Above 4,100,000", old: "700,000 + 35% (+surcharge)", neu: "616,000 + 35%", diff: "Surcharge removed" },
-  ];
+function ReadMore() {
   return (
-    <div className="glass rounded-2xl overflow-hidden">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="bg-white/5 text-left">
-            <tr>
-              <th className="px-4 py-3 font-semibold">Annual Income (PKR)</th>
-              <th className="px-4 py-3 font-semibold text-muted-foreground">FY 2025-26</th>
-              <th className="px-4 py-3 font-semibold text-primary">FY 2026-27</th>
-              <th className="px-4 py-3 font-semibold">Change</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((r) => (
-              <tr key={r.range} className="border-t border-white/5 hover:bg-white/[0.02] transition">
-                <td className="px-4 py-3 font-medium">{r.range}</td>
-                <td className="px-4 py-3 text-muted-foreground line-through decoration-white/20">{r.old}</td>
-                <td className="px-4 py-3 text-foreground font-semibold">{r.neu}</td>
-                <td className="px-4 py-3 text-primary font-medium">{r.diff}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-function FAQAccordion() {
-  const [open, setOpen] = useState<number | null>(0);
-  const [query, setQuery] = useState("");
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return FAQ.map((f, i) => ({ ...f, i }));
-    return FAQ.map((f, i) => ({ ...f, i })).filter((f) => f.q.toLowerCase().includes(q) || f.a.toLowerCase().includes(q));
-  }, [query]);
-
-  return (
-    <div className="space-y-3">
-      <div className="relative">
-        <input
-          value={query} onChange={(e) => setQuery(e.target.value)}
-          placeholder="🔍 Search questions… e.g. surcharge, filer, freelancer"
-          className={inputCls}
-        />
-      </div>
-      {filtered.length === 0 ? (
-        <p className="text-center text-sm text-muted-foreground py-6">No matching questions. Try another keyword.</p>
-      ) : filtered.map((f) => {
-        const isOpen = open === f.i;
-        return (
-          <div key={f.i} className="glass rounded-xl overflow-hidden hover:border-white/20 transition">
-            <h3>
-              <button
-                onClick={() => setOpen(isOpen ? null : f.i)}
-                className="w-full flex items-center justify-between text-left px-5 py-4 hover:bg-white/[0.03] transition"
-                aria-expanded={isOpen}
-              >
-                <span className="font-medium pr-4">{f.q}</span>
-                <span className={`text-primary text-xl transition-transform shrink-0 ${isOpen ? "rotate-45" : ""}`}>+</span>
-              </button>
-            </h3>
-            {isOpen && (
-              <div className="px-5 pb-5 text-muted-foreground leading-relaxed animate-fade-up">{f.a}</div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function SeoContent() {
-  return (
-    <section id="seo-article" className="glass rounded-2xl p-8 space-y-8">
-      <div>
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Pakistan Tax Calculator 2026-27</h2>
-        <p className="mt-3 text-muted-foreground leading-relaxed">
-          The <strong>Pakistan Tax Calculator 2026-27</strong> is the fastest way to estimate your annual income
-          tax, monthly withholding, and net take-home salary based on the latest FBR Tax Slabs announced in
-          Budget 2026-27. Whether you are a salaried employee in Karachi, a government officer in Islamabad, a
-          freelancer in Lahore, or a small business owner in Rawalpindi or Faisalabad, this free
-          <strong> Tax Calculator PK</strong> gives you accurate, real-time figures without sign-up.
-        </p>
-      </div>
-
-      <div>
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Salary Tax Calculator Pakistan</h2>
-        <p className="mt-3 text-muted-foreground leading-relaxed">
-          Our <strong>Salary Tax Calculator Pakistan</strong> applies the official FBR salaried-individual slabs
-          to your monthly or annual income. Enter your salary, choose between salaried and government
-          employment, and instantly see annual tax, monthly deduction, effective tax rate, and net salary.
-          The tool also compares <strong>Pakistan Salary Tax</strong> for FY 2025-26 vs FY 2026-27 so you can
-          see exactly how much you save under the new Budget 2026-27 Tax Slabs after the high-income
-          surcharge was removed.
-        </p>
-      </div>
-
-      <div>
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Latest FBR Tax Slabs 2026-27</h2>
-        <p className="mt-3 text-muted-foreground leading-relaxed">
-          The latest <strong>FBR Tax Slabs 2026-27</strong> keep the tax-free threshold at Rs 600,000 per year
-          (Rs 50,000 per month) and reduce rates across most brackets. Income up to Rs 1.2 million is now taxed
-          at just 1% on the amount above Rs 600,000, down from 5%. Higher slabs continue at 11%, 23%, 30%, and
-          35%, but the 10% surcharge on income above Rs 10 million has been abolished. These updated
-          <strong> Tax Rates Pakistan</strong> are reflected in the calculator above and in the Tax Slab Pakistan
-          comparison table.
-        </p>
-      </div>
-
-      <div>
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Freelancer Tax in Pakistan</h2>
-        <p className="mt-3 text-muted-foreground leading-relaxed">
-          <strong>Freelancer Tax Pakistan</strong> follows the export-of-services regime: registered FBR filers
-          pay just 1% withholding on foreign remittances, while non-filers pay 2%. Use the
-          <strong> FBR Tax Calculator</strong> above to estimate liability on your annual freelance income from
-          platforms like Upwork, Fiverr, and direct clients. Freelancers earning over Rs 600,000 a year must
-          register on FBR Iris and file an annual income tax return to retain Active Taxpayer List (ATL)
-          benefits on bank transactions, property, and vehicles.
-        </p>
-      </div>
-
-      <div>
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Income Tax Slab Pakistan</h2>
-        <p className="mt-3 text-muted-foreground leading-relaxed">
-          The <strong>Income Tax Slab Pakistan</strong> structure for salaried individuals is progressive:
-          higher earners pay a higher marginal rate. The first Rs 600,000 of annual income is fully exempt,
-          and only the portion of income above each threshold is taxed at the bracket rate. This calculator
-          handles the marginal math automatically so you can focus on planning. Government employees benefit
-          from an additional 25% rebate on calculated tax under Section 149, which is also reflected in
-          results. Combined with the new Budget 2026-27 Tax Slabs, most salaried Pakistanis in Karachi,
-          Lahore, Islamabad, Rawalpindi, and Faisalabad will see a meaningful reduction in
-          <strong> Income Tax Pakistan</strong> liability this year.
-        </p>
-      </div>
-
-      <div className="grid sm:grid-cols-3 gap-3 text-sm">
-        <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
-          <h3 className="font-semibold mb-1">FBR Compliant</h3>
-          <p className="text-muted-foreground text-xs">Built on Finance Bill 2026 slabs.</p>
-        </div>
-        <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
-          <h3 className="font-semibold mb-1">Privacy First</h3>
-          <p className="text-muted-foreground text-xs">Calculations stay in your browser.</p>
-        </div>
-        <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4">
-          <h3 className="font-semibold mb-1">Instant Results</h3>
-          <p className="text-muted-foreground text-xs">No reload, no sign-up.</p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function AiSummary() {
-  return (
-    <section
-      aria-label="AI search summary"
-      className="glass rounded-2xl p-6 border-primary/20"
-    >
-      <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary mb-2">Summary</div>
-      <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
-        Pakistan Tax Calculator 2026-27 is a free online tool that helps salaried individuals,
-        government employees, freelancers, and business owners estimate their income tax liability
-        according to the latest FBR tax slabs announced in Budget 2026-27. Users can calculate
-        salary tax, freelancer tax, tax deductions, net salary, and compare tax savings against
-        previous tax years.
-      </p>
-    </section>
-  );
-}
-
-function QuickAnswers() {
-  const items = [
-    {
-      q: "What is the tax-free salary limit in Pakistan 2026-27?",
-      a: "Rs 600,000 per year (Rs 50,000 per month). Salaried individuals earning up to this amount pay zero income tax under the latest FBR Tax Slabs 2026-27.",
-    },
-    {
-      q: "What are the latest FBR tax slabs 2026-27?",
-      a: "Up to Rs 600,000: 0%. Rs 600,001–1,200,000: 1% over 600k. Rs 1.2M–2.2M: Rs 6,000 + 11%. Rs 2.2M–3.2M: Rs 116,000 + 23%. Rs 3.2M–4.1M: Rs 346,000 + 30%. Above Rs 4.1M: Rs 616,000 + 35%. The 10% high-income surcharge has been removed.",
-    },
-    {
-      q: "What is freelancer tax in Pakistan?",
-      a: "Freelancers on the export-of-services regime pay 1% withholding tax on foreign remittances if they are FBR filers, or 2% if non-filers. Registering on FBR Iris and filing an annual return is required for income above Rs 600,000.",
-    },
-  ];
-  return (
-    <section aria-label="Quick answers" className="grid md:grid-cols-3 gap-4">
-      {items.map((it) => (
-        <div key={it.q} className="glass rounded-2xl p-5">
-          <h3 className="font-semibold text-foreground text-sm">{it.q}</h3>
-          <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{it.a}</p>
-        </div>
-      ))}
+    <section aria-label="Learn more" className="grid sm:grid-cols-2 gap-4">
+      <Link to="/tax-guide" className="glass rounded-2xl p-5 hover:bg-white/[0.05] hover:-translate-y-0.5 transition">
+        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Read more</div>
+        <h2 className="mt-2 text-lg font-semibold">Pakistan Income Tax Guide 2026</h2>
+        <p className="mt-1 text-sm text-muted-foreground">FBR slabs, salary &amp; freelancer tax explained →</p>
+      </Link>
+      <Link to="/faq" className="glass rounded-2xl p-5 hover:bg-white/[0.05] hover:-translate-y-0.5 transition">
+        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">FAQ</div>
+        <h2 className="mt-2 text-lg font-semibold">Common FBR Tax Questions</h2>
+        <p className="mt-1 text-sm text-muted-foreground">Filer, surcharge, freelancer rules answered →</p>
+      </Link>
     </section>
   );
 }
@@ -906,11 +678,11 @@ function Footer() {
           For estimation only. Consult FBR or a registered tax advisor for final filing.
         </div>
         <div>
-          <div className="font-semibold mb-2">Links</div>
+          <div className="font-semibold mb-2">Explore</div>
           <ul className="space-y-1 text-muted-foreground">
+            <li><Link to="/tax-guide" className="hover:text-primary transition">FBR Tax Slabs 2026</Link></li>
+            <li><Link to="/faq" className="hover:text-primary transition">Tax FAQs</Link></li>
             <li><a className="hover:text-primary transition" href="https://www.fbr.gov.pk" target="_blank" rel="noreferrer noopener">FBR Official Site</a></li>
-            <li><a className="hover:text-primary transition" href="#top">About</a></li>
-            <li><a className="hover:text-primary transition" href="#faq">Contact</a></li>
           </ul>
         </div>
       </div>
