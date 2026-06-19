@@ -52,16 +52,16 @@ const OG_IMAGE = "https://storage.googleapis.com/gpt-engineer-file-uploads/attac
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Pakistan Tax Calculator 2026-27 | Salary Tax Calculator Pakistan | FBR Tax Slabs" },
-      { name: "description", content: "Calculate Pakistan salary tax and freelancer tax instantly using the latest FBR Tax Slabs 2026-27. Free Pakistan Tax Calculator with tax comparison, monthly deductions, and net salary estimates." },
+      { title: "Pakistan Tax Calculator 2026 | Instantly Calculate Your Salary After Tax" },
+      { name: "description", content: "Free Pakistan Tax Calculator 2026 to instantly estimate your salary after tax based on latest FBR rules. Simple, fast, and accurate income tax estimation tool." },
       { name: "keywords", content: "Pakistan Tax Calculator, Salary Tax Calculator Pakistan, Tax Slab Pakistan, Income Tax Pakistan, FBR Tax Calculator, Tax Slabs 2026-27, Freelancer Tax Pakistan, Income Tax Slab Pakistan, Pakistan Salary Tax, FBR Tax Slabs, Tax Calculator PK, Salary Tax Pakistan, Tax Rates Pakistan, Budget 2026-27 Tax Slabs, Pakistan Tax Rates" },
-      { property: "og:title", content: "Pakistan Tax Calculator 2026-27 | Salary Tax Calculator Pakistan | FBR Tax Slabs" },
-      { property: "og:description", content: "Calculate Pakistan salary tax and freelancer tax instantly using the latest FBR Tax Slabs 2026-27. Free, fast, mobile-friendly." },
+      { property: "og:title", content: "Pakistan Tax Calculator 2026 | Instantly Calculate Your Salary After Tax" },
+      { property: "og:description", content: "Free Pakistan Tax Calculator 2026 to instantly estimate your salary after tax based on latest FBR rules. Simple, fast, and accurate." },
       { property: "og:url", content: SITE_URL + "/" },
       { property: "og:image", content: OG_IMAGE },
       { property: "og:image:alt", content: "Pakistan Tax Calculator 2026-27 — FBR Salary & Freelancer Tax" },
-      { name: "twitter:title", content: "Pakistan Tax Calculator 2026-27 | FBR Salary & Freelancer Tax" },
-      { name: "twitter:description", content: "Calculate Pakistan salary tax and freelancer tax instantly using FBR Tax Slabs 2026-27." },
+      { name: "twitter:title", content: "Pakistan Tax Calculator 2026 | Instantly Calculate Your Salary After Tax" },
+      { name: "twitter:description", content: "Free Pakistan Tax Calculator 2026 to instantly estimate your salary after tax based on latest FBR rules." },
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [{ rel: "canonical", href: SITE_URL + "/" }],
@@ -211,8 +211,8 @@ function Hero() {
           Updated — Finance Bill, June 12, 2026
         </span>
         <h1 className="mt-6 text-4xl sm:text-6xl font-extrabold tracking-tight leading-[1.05]">
-          Pakistan Tax Calculator <span className="text-primary">2026-27</span>
-          <span className="block text-foreground/70 text-xl sm:text-2xl font-medium mt-3">FBR Salary Tax Calculator</span>
+          Pakistan Tax Calculator <span className="text-primary">2026</span>
+          <span className="block text-foreground/70 text-xl sm:text-2xl font-medium mt-3">Instantly know your salary after tax</span>
         </h1>
         <p className="mx-auto mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground">
           Free Pakistan Tax Calculator for Budget 2026-27 — calculate Salary Tax, Freelancer Tax & FBR liability instantly with the latest Tax Slabs Pakistan 2026-27.
